@@ -2,9 +2,8 @@ FROM mongo
 
 RUN apt-get update \
   && apt-get install -y wget \
-  && rm -rf /var/lib/apt/lists/*
-
-RUN wget http://bulk.openweathermap.org/sample/current.city.list.json.gz \
+  && rm -rf /var/lib/apt/lists/* \ 
+  && wget http://bulk.openweathermap.org/sample/current.city.list.json.gz \
   && gunzip current.city.list.json.gz \
   && mv current.city.list.json /data/current.city.list.json
 
