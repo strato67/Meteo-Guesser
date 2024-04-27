@@ -11,17 +11,16 @@ services:
     ports:
       - 3000:3000
     command: npm run dev
-  mongodb:
-    image: mongo:latest
-    container_name: cityNames
+    depends_on:
+      - city-datastore
+  city-datastore:
+    build: ./city-datastore
     restart: unless-stopped
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: password
     ports:
       - 27017:27017
     volumes:
       - mongodata:/data/db
+      - ./city-datastore/init.sh:/docker-entrypoint-initdb.d/init.sh
 
 volumes:
   mongodata:
