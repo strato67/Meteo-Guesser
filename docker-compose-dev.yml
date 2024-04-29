@@ -25,6 +25,20 @@ services:
     image: redislabs/redismod
     ports:
       - 6379:6379
+  weather-retriever:
+    build:
+      context: ./weather-retriever
+      target: development
+    volumes:
+      - ./weather-retriever:/app
+    stop_signal: SIGINT
+    ports:
+      - 4200:4200
+    depends_on:
+      - redis
+    environment:
+      FLASK_RUN_HOST: 0.0.0.0
+
 
 volumes:
   mongodata:

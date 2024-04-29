@@ -1,4 +1,5 @@
 from redis import Redis
+import requests
 
 def populate_db():
     print("Not implemented yet")
@@ -6,5 +7,6 @@ def populate_db():
 def fetch_weather_data(city):
     print("Not implemented yet")
 
-def get_weather_data():
-    print("Not implemented yet")
+def get_locations():
+    location_list = requests.get("http://city-gen-service:3000")
+    return location_list.json()
