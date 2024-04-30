@@ -2,3 +2,4 @@ node_modules
 build
 .venv
 __pycache__
+*.env

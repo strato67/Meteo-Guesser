@@ -29,6 +29,8 @@ services:
     build:
       context: ./weather-retriever
       target: development
+    env_file:
+      - weather-retriever/.env
     volumes:
       - ./weather-retriever:/app
     stop_signal: SIGINT
@@ -38,7 +40,6 @@ services:
       - redis
     environment:
       FLASK_RUN_HOST: 0.0.0.0
-
 
 volumes:
   mongodata:
