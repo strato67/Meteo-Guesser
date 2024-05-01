@@ -1,13 +1,20 @@
 from flask import Flask
 from redis import Redis
-from database import fetch_weather_data, populate_db, get_locations
+from database import fetch_weather_data, populate_db, get_locations, get_db_size
 
 app = Flask(__name__)
 
 @app.route('/')
 def get_weather():
-    location = get_locations()
-    test = {"message": location}
+
+    db_size = get_db_size()
+
+    if db_size == 0:
+        # location = get_locations()
+        populate_db()
+        print("Cache database populated", flush=True)
+    test = {"message": db_size}
+    print("Sending weather locations...", flush=True)
     return test
 
 if __name__ == '__main__':
