@@ -12,9 +12,9 @@ def populate_db():
     for i in range(len(input_locations)):
         latitude = input_locations[i]["coord"]["lat"]
         longitude = input_locations[i]["coord"]["lon"]
-        current_weather = "t" #fetch_weather_data(latitude, longitude)
+        current_weather = fetch_weather_data(latitude, longitude)
 
-        weather_data = json.dumps({"location": input_locations[i], "currentWeather": current_weather})
+        weather_data = json.dumps({"location": input_locations[i]["city"]+ ", " + input_locations[i]["country"], "currentWeather": current_weather})
 
         redis_cli.set(i, weather_data)
     
@@ -22,7 +22,12 @@ def populate_db():
 def fetch_weather_data(latitude, longitude):
 
     response = requests.get(f"http://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&appid={api_key}").json()
-    return response
+    current_weather = response["weather"][0]["main"]
+    current_temp = response["main"]["temp"]
+
+    current_data = {"weather": current_weather, "temperature": current_temp}
+
+    return current_data
 
 def get_locations():
     response = requests.get("http://city-gen-service:3000").json()

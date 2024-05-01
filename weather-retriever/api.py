@@ -7,12 +7,12 @@ app = Flask(__name__)
 def get_weather():
 
     db_size = get_db_size()
-
+    e = get_locations()
     if db_size == 0:
         # location = get_locations()
         populate_db()
         print("Cache database populated", flush=True)
-    test = {"message": db_size}
+    test = {"message": e}
     print("Sending weather locations...", flush=True)
     return test
 
