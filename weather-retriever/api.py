@@ -1,5 +1,4 @@
 from flask import Flask
-from redis import Redis
 from database import fetch_weather_data, populate_db, get_locations, get_db_size
 
 app = Flask(__name__)
