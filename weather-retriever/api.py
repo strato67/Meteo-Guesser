@@ -1,5 +1,5 @@
 from flask import Flask
-from database import fetch_weather_data, populate_db, get_locations, get_db_size
+from database import populate_db, get_db_size, get_location_batch
 
 app = Flask(__name__)
 
@@ -7,14 +7,15 @@ app = Flask(__name__)
 def get_weather():
 
     db_size = get_db_size()
-    e = get_locations()
+    location_payload = get_location_batch()# get_locations()
     if db_size == 0:
         # location = get_locations()
         populate_db()
         print("Cache database populated", flush=True)
-    test = {"message": e}
+    
+    response = {"queue": location_payload}
     print("Sending weather locations...", flush=True)
-    return test
+    return response
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=4200, debug=True)

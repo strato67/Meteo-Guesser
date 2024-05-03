@@ -40,3 +40,17 @@ def get_locations():
 
 def get_db_size():
     return redis_cli.dbsize()
+
+def get_location_batch():  
+
+    db_size = get_db_size()
+
+    query_list = [str(x) for x in range(db_size-1, db_size-5, -1)]
+
+    location_batch = redis_cli.mget(query_list)
+    parsed_data = []
+    for item in location_batch:
+        json_str = item.decode('utf-8')
+        parsed_data.append(json.loads(json_str))
+
+    return parsed_data
