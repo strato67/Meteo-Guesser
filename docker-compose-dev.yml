@@ -38,6 +38,8 @@ services:
       - 4200:4200
     depends_on:
       - redis
+      - city-datastore
+      - city-gen-service
     environment:
       FLASK_RUN_HOST: 0.0.0.0
 

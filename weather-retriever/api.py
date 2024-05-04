@@ -7,12 +7,12 @@ app = Flask(__name__)
 def get_weather():
 
     db_size = get_db_size()
-    location_payload = get_location_batch()# get_locations()
+    # get_locations()
     if db_size == 0:
         # location = get_locations()
         populate_db()
         print("Cache database populated", flush=True)
-    
+    location_payload = get_location_batch()
     response = {"queue": location_payload}
     print("Sending weather locations...", flush=True)
     return response
