@@ -3,9 +3,18 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24 w-full">
-      <div className="flex flex-col gap-4">
-        <h1 className="text-5xl font-bold text-center">Weather Guesser</h1>
+    <main className="flex flex-col items-center justify-center w-full gap-6 min-h-screen">
+      
+      <h1 className="text-5xl font-bold text-center">Weather Guesser</h1>
+      <div className="flex flex-col md:flex-row gap-4">
+
+        <Button asChild className="w-fit self-center p-6">
+
+          <Link href="/singleplayer">
+            Single Player
+          </Link>
+
+        </Button>
         <Button asChild className="w-fit self-center p-6">
 
           <Link href="/singleplayer">
