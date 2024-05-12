@@ -1,9 +1,9 @@
 import Link from "next/link"
 import { ModeToggle } from "./mode-toggle"
 
-export default function Component() {
+export default function Navbar() {
     return (
-        <header className="flex h-20 w-full shrink-0 items-center px-4 md:px-6 top-0 fixed">
+        <header className="flex h-20 w-full shrink-0 items-center px-4 md:px-6 top-0 fixed z-10">
             
             <Link className="mr-6 lg:flex" href="/">
                 <MountainIcon className="h-6 w-6" />
