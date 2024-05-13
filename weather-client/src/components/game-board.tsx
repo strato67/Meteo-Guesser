@@ -14,14 +14,11 @@ export default function GameBoard({
         "bg-green-600",
     ];
 
-    const handleClick = (index: number) => {
-        setSelection(index);
-    };
 
     return (
         <div className="grid grid-cols-2 gap-1 w-full items-center h-full overflow-hidden">
             {cardColors.map((color, index) => (
-                <div key={index} className="h-full" onClick={() => handleClick(index)}>
+                <div key={index} className="h-full" onClick={() => setSelection(index)}>
                     <CardComponent color={color} activeSelection={selection == index} />
                 </div>
             ))}
