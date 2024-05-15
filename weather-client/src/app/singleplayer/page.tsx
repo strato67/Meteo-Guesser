@@ -13,12 +13,44 @@ export default function Page() {
 
     const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
     const [selection, setSelection] = useState<number | null>(null);
+    const [timer, setTimer] = useState<number>(60);
+    const [intermission, setIntermission] = useState<boolean>(false);
+    const [question, setQuestion] = useState<string>("");
+    const [round, setRound] = useState<number>(1);
+
+    const parseCountdown = (message: string) => {
+
+        const value = JSON.parse(message).countdown;
+        setTimer(value);
+
+    };
+
+    const parseRound = (message: string) => {
+            
+            const value = JSON.parse(message).round;
+            setRound(value);
+    };
 
     useEffect(() => {
         if (selection !== null) {
             sendMessage(selection!.toString());
         }
     }, [selection, sendMessage]);
+
+    useEffect(() => {
+
+        const message = lastMessage?.data;
+        console.log(message);
+
+        if (message && message.includes("countdown")) {
+            parseCountdown(message);
+        }       
+        
+        if (message && message.includes("round")) {
+            parseRound(message);
+        }
+        
+    }, [lastMessage]);
 
     const connectionStatus = {
         [ReadyState.CONNECTING]: "Connecting",
@@ -28,7 +60,7 @@ export default function Page() {
         [ReadyState.UNINSTANTIATED]: "Uninstantiated",
     }[readyState];
 
-    if (connectionStatus === "Connecting") {
+    if (connectionStatus === "Connecting" ) {
         return <LoadingGame />;
     }
 
@@ -40,14 +72,14 @@ export default function Page() {
         <>
             <div className="relative w-full items-center h-screen z-0">
                 <div className="flex flex-col w-full items-center mt-16 gap-4 absolute inset-x-0 top-0 h-2/3">
-                    <div className="text-xl font-semibold">1/10</div>
+                    <div className="text-xl font-semibold">{round}/10</div>
                     <h1 className="text-3xl text-center font-bold">
                         The temperature is __ degrees Celsius in Whitby, ON...
                     </h1>
                     <div className="border-t border-stone w-full"></div>
                     <div className="grid grid-cols-3 justify-items-center w-full place-items-center h-1/2">
                         <div className="justify-self-center pt-8 bg-indigo-700 rounded-full h-24 text-center w-24 font-semibold text-2xl text-white">
-                            1:00
+                            {timer}
                         </div>
                         <Image
                             src="https://ralfvanveen.com/wp-content/uploads/2021/06/Placeholder-_-Glossary.svg"

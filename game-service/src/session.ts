@@ -16,9 +16,31 @@
 
 // Send result to client
 
+type WeatherData = {
+  currentWeather: { temperature: number; weather: string };
+  location: string;
+};
 
-class Session {
+import { Question } from "./question";
 
+export const getWeatherBatch = async () => {
+  try {
+    const response = await fetch("http://127.0.0.1:4200/");
+    const data = await response.json();
+    return data.queue;
+  } catch (error) {
+    return { error: "Could not get weather data" };
+  }
+};
 
+export const generateRoundData = (data: Array<WeatherData>) => {
+  const selectedLocation = data[Math.floor(Math.random() * data.length)];
 
+  const question = new Question(
+    selectedLocation.location,
+    selectedLocation.currentWeather.weather,
+    selectedLocation.currentWeather.temperature
+  );
+
+  const questionType = question.getQuestionType();
 };

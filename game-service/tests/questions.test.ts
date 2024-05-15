@@ -20,5 +20,12 @@ describe("Generating Question", () => {
   test("Generate question", () => {
     const regex = /^The weather in .+ is .+ and .+$/;
     expect(question.generateQuestion()).toMatch(regex);
+
+    console.log(question.generateQuestion());
+  });
+
+  test("Get question type", () => {
+    expect(["location", "weather", "temperature"]).toContain(question.getQuestionType());
+    console.log(question.getQuestionType());
   });
 });
