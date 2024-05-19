@@ -1,6 +1,5 @@
 import WebSocket from "ws";
-import { Question } from "./question";
-import { getWeatherBatch } from "./session";
+import { getWeatherBatch, generateQuestionData } from "./session";
 
 const wss = new WebSocket.Server({ port: 8080 });
 console.log("Server started on port 8080");
@@ -14,13 +13,21 @@ function startRound() {
   if(round > MAX_ROUNDS){
     return;
   }
+
+  let question = null;
+  //const weatherData = await getWeatherBatch();
+  //const questionData = await generateQuestionData(weatherData);
+
   getWeatherBatch().then((data) => {
-    const question = new Question("New York", "sunny", 75 * 273);
+    const questionData = generateQuestionData(data);
+    question = questionData.question;
+    const answerOptions = questionData.answerOptions;
+    const questionString = questionData.questionString;
+    
     wss.clients.forEach((client) => {
-      client.send(JSON.stringify(question));
+      client.send(JSON.stringify({answerOptions, questionString}));
     });
   });
-
 
   countdownInterval = setInterval(() => {
     if (countdownValue >= 0) {

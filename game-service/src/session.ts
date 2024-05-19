@@ -1,27 +1,9 @@
-// TODO
-
-// Create a new session
-
-// Buffer for 15 seconds
-
-// Get batched data from weather-retreiver
-
-// Generate 4 types of questions/answers
-
-// Send random question to client
-
-// Wait 60 seconds for client response
-
-// Compare answer to correct answer
-
-// Send result to client
+import { Question } from "./question";
 
 type WeatherData = {
   currentWeather: { temperature: number; weather: string };
   location: string;
 };
-
-import { Question } from "./question";
 
 export const getWeatherBatch = async () => {
   try {
@@ -33,7 +15,7 @@ export const getWeatherBatch = async () => {
   }
 };
 
-export const generateRoundData = (data: Array<WeatherData>) => {
+export const generateQuestionData = (data: Array<WeatherData>) => {
   const selectedLocation = data[Math.floor(Math.random() * data.length)];
 
   const question = new Question(
@@ -41,6 +23,45 @@ export const generateRoundData = (data: Array<WeatherData>) => {
     selectedLocation.currentWeather.weather,
     selectedLocation.currentWeather.temperature
   );
+  const questionString = question.generateQuestion();
+
+  const answerOptions = generateAnswerOptions(question, data);
+
+  return { questionString, question, answerOptions };
+
+};
+
+export const generateAnswerOptions = (
+  question: Question,
+  data: Array<WeatherData>
+) => {
 
   const questionType = question.getQuestionType();
+
+  if (questionType === null) {
+    return [];
+  }
+
+  const optionsMap: {
+    temperature: number[];
+    weather: string[];
+    location: string[];
+  } = {
+    temperature: [],
+    weather: [],
+    location: [],
+  };
+
+  data.forEach((location) => {
+    const locationName = location.location;
+    const weather = location.currentWeather.weather;
+    const temperature = location.currentWeather.temperature;
+
+    optionsMap["temperature"].push(temperature);
+    optionsMap["weather"].push(weather);
+    optionsMap["location"].push(locationName);
+  });
+
+  return optionsMap[questionType as keyof typeof optionsMap];
+
 };
