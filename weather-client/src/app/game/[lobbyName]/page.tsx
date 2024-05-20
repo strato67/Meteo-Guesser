@@ -16,19 +16,26 @@ export default function Page() {
     const [timer, setTimer] = useState<number>(60);
     const [intermission, setIntermission] = useState<boolean>(false);
     const [question, setQuestion] = useState<string>("");
+    const [options, setOptions] = useState<string[]>([]);
     const [round, setRound] = useState<number>(1);
 
-    const parseCountdown = (message: string) => {
+    const parseMessage = (message: string) => {
+        const parsedMessage = JSON.parse(message);
+        if (parsedMessage.countdown !== undefined) {
+            setTimer(parsedMessage.countdown);
+        }
+    
+        if (parsedMessage.round !== undefined) {
+            setRound(parsedMessage.round);
+        }
+    
+        if (parsedMessage.questionString !== undefined) {
+            setQuestion(parsedMessage.questionString);
+        }
 
-        const value = JSON.parse(message).countdown;
-        setTimer(value);
-
-    };
-
-    const parseRound = (message: string) => {
-            
-            const value = JSON.parse(message).round;
-            setRound(value);
+        if (parsedMessage.answerOptions !== undefined) {
+            setOptions(parsedMessage.answerOptions);
+        }
     };
 
     useEffect(() => {
@@ -42,14 +49,10 @@ export default function Page() {
         const message = lastMessage?.data;
         console.log(message);
 
-        if (message && message.includes("countdown")) {
-            parseCountdown(message);
-        }       
-        
-        if (message && message.includes("round")) {
-            parseRound(message);
+        if (message) {
+            parseMessage(message);
         }
-        
+
     }, [lastMessage]);
 
     const connectionStatus = {
@@ -60,7 +63,7 @@ export default function Page() {
         [ReadyState.UNINSTANTIATED]: "Uninstantiated",
     }[readyState];
 
-    if (connectionStatus === "Connecting" ) {
+    if (connectionStatus === "Connecting") {
         return <LoadingGame />;
     }
 
@@ -74,7 +77,7 @@ export default function Page() {
                 <div className="flex flex-col w-full items-center mt-16 gap-4 absolute inset-x-0 top-0 h-2/3">
                     <div className="text-xl font-semibold">{round}/10</div>
                     <h1 className="text-3xl text-center font-bold">
-                        The temperature is __ degrees Celsius in Whitby, ON...
+                        {question}
                     </h1>
                     <div className="border-t border-stone w-full"></div>
                     <div className="grid grid-cols-3 justify-items-center w-full place-items-center h-1/2">
@@ -97,7 +100,7 @@ export default function Page() {
                 </div>
 
                 <div className="absolute inset-x-0 bottom-0 h-1/3">
-                    <GameBoard selection={selection} setSelection={setSelection} />
+                    <GameBoard selection={selection} setSelection={setSelection} options={options} />
                 </div>
             </div>
         </>

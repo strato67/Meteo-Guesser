@@ -2,9 +2,11 @@ import { Card, CardTitle } from "./ui/card";
 
 export default function GameBoard({
     selection,
+    options,
     setSelection,
 }: {
     selection: number | null;
+    options: string[];
     setSelection: (index: number) => void;
 }) {
     const cardColors = [
@@ -19,7 +21,7 @@ export default function GameBoard({
         <div className="grid grid-cols-2 gap-1 w-full items-center h-full overflow-hidden">
             {cardColors.map((color, index) => (
                 <div key={index} className="h-full" onClick={() => setSelection(index)}>
-                    <CardComponent color={color} activeSelection={selection == index} />
+                    <CardComponent color={color} activeSelection={selection == index} option={options[index]}/>
                 </div>
             ))}
         </div>
@@ -28,9 +30,11 @@ export default function GameBoard({
 
 function CardComponent({
     color,
+    option,
     activeSelection,
 }: {
     color: string;
+    option: string;
     activeSelection?: boolean;
 }) {
     return (
@@ -40,7 +44,7 @@ function CardComponent({
         >
             <div className="grid content-center justify-items-center h-full">
                 <CardTitle className="md:text-2xl text-lg font-bold text-ellipsis overflow-hidden w-full  select-none">
-                    Card Title
+                    {option}
                 </CardTitle>
             </div>
         </Card>

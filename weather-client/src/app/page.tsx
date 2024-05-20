@@ -10,15 +10,15 @@ export default function Home() {
 
         <Button asChild className="w-fit self-center p-6">
 
-          <Link href="/singleplayer">
-            Single Player
+          <Link href="/game/test">
+            Create Game
           </Link>
 
         </Button>
         <Button asChild className="w-fit self-center p-6">
 
-          <Link href="/singleplayer">
-            Single Player
+          <Link href="/join">
+            Join Game
           </Link>
 
         </Button>
