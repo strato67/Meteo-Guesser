@@ -17,6 +17,7 @@ export default function Page() {
 
     const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
     const [selection, setSelection] = useState<number | null>(null);
+    const [answer, setAnswer] = useState<string>("")
     const [timer, setTimer] = useState<number>(60);
     const [intermission, setIntermission] = useState<boolean>(false);
     const [question, setQuestion] = useState<string>("");
@@ -43,10 +44,10 @@ export default function Page() {
     };
 
     useEffect(() => {
-        if (selection !== null) {
-            sendMessage(selection!.toString());
+        if (answer !== "") {
+            sendMessage(answer!.toString());
         }
-    }, [selection, sendMessage]);
+    }, [answer, sendMessage, setAnswer]);
 
     useEffect(() => {
 
@@ -104,7 +105,7 @@ export default function Page() {
                 </div>
 
                 <div className="absolute inset-x-0 bottom-0 h-1/3">
-                    <GameBoard selection={selection} setSelection={setSelection} options={options} />
+                    <GameBoard selection={selection} setSelection={setSelection} options={options} setAnswer={setAnswer} />
                 </div>
             </div>
         </>
