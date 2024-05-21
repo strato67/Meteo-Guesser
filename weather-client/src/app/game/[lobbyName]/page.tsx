@@ -7,9 +7,13 @@ import LoadingGame from "@/components/loading-game";
 import ConnectionFailed from "@/components/connection-failed";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
 
 export default function Page() {
-    const socketUrl = "ws://localhost:8080";
+
+    const { lobbyName } = useParams();
+    const [id, setId] = useState(Math.random())
+    const socketUrl = `ws://localhost:8080/${lobbyName}/?token=${id}`;
 
     const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
     const [selection, setSelection] = useState<number | null>(null);
