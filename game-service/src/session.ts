@@ -5,6 +5,12 @@ type WeatherData = {
   location: string;
 };
 
+type PlayerScore = { selection: string; score: number };
+
+export type PlayerList = {
+  [key: string]: PlayerScore;
+};
+
 export const getWeatherBatch = async () => {
   try {
     const response = await fetch("http://127.0.0.1:4200/");
@@ -28,14 +34,12 @@ export const generateQuestionData = (data: Array<WeatherData>) => {
   const answerOptions = generateAnswerOptions(question, data);
 
   return { questionString, question, answerOptions };
-
 };
 
 export const generateAnswerOptions = (
   question: Question,
   data: Array<WeatherData>
 ) => {
-
   const questionType = question.getQuestionType();
 
   if (questionType === null) {
@@ -63,5 +67,23 @@ export const generateAnswerOptions = (
   });
 
   return optionsMap[questionType as keyof typeof optionsMap];
+};
 
+export const scoreAnswers = (playerList: PlayerList, question: Question) => {
+  const questionType = question.getQuestionType();
+
+  const possibleAnswers: { [key: string]: string | number } = {
+    temperature: question.getTemperature(),
+    weather: question.getWeather(),
+    location: question.getLocation(),
+  };
+
+  if (!questionType || !possibleAnswers.hasOwnProperty(questionType)) {
+    return playerList;
+  }
+  const answer = possibleAnswers[questionType];
+
+  for (const player in playerList) {
+    console.log(player)
+  }
 };

@@ -21,11 +21,11 @@ describe("Generating Question", () => {
     const regex = /^The weather in .+ is .+ and .+$/;
     expect(question.generateQuestion()).toMatch(regex);
 
-    console.log(question.generateQuestion());
+    // console.log(question.generateQuestion());
   });
 
   test("Get question type", () => {
     expect(["location", "weather", "temperature"]).toContain(question.getQuestionType());
-    console.log(question.getQuestionType());
+    // console.log(question.getQuestionType());
   });
 });

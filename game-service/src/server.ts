@@ -1,18 +1,21 @@
 import WebSocket from "ws";
-import { getWeatherBatch, generateQuestionData } from "./session";
+import { getWeatherBatch, generateQuestionData, PlayerList } from "./session";
 import { Question } from "./question";
 
-const playerList: { [key: string]: string } = {};
+const playerList: PlayerList = {};
 
 export const webSocketServer = () => {
   const wss = new WebSocket.Server({ noServer: true, clientTracking: true });
+  const MAX_ROUNDS = 10;
+
   let countdownInterval: NodeJS.Timeout | undefined;
   let countdownValue = 60;
   let round = 1;
-  const MAX_ROUNDS = 10;
+
   let question: null | Question = null;
   let answerOptions: string[] | number[] = [];
   let questionString: string = "";
+
   function startRound() {
     if (round > MAX_ROUNDS) {
       return;
@@ -20,6 +23,7 @@ export const webSocketServer = () => {
 
     getWeatherBatch().then((data) => {
       const questionData = generateQuestionData(data);
+      
       question = questionData.question;
       answerOptions = questionData.answerOptions;
       questionString = questionData.questionString;
@@ -61,10 +65,13 @@ export const webSocketServer = () => {
   };
 
   wss.on("connection", (ws: WebSocket, req) => {
-    console.log(playerList);
-    console.log(req.url);
-    //req.url
+    const url = new URL(req.url || "", `http://${req.headers.host}`);
 
+    const tokenID = url.search.replace("?token=", "");
+    playerList[tokenID] = { selection: "", score: 0 };
+    console.log(`User ${tokenID} joined.`);
+
+    console.log(playerList);
     if (question !== null) {
       wss.clients.forEach((client) => {
         client.send(JSON.stringify({ round, questionString, answerOptions }));
@@ -76,14 +83,19 @@ export const webSocketServer = () => {
     }
 
     ws.on("message", (message: string) => {
-      console.log(`Received message: ${message} from ${req.url}`);
+      console.log(`Received message: ${message} from ${tokenID}`);
+
+      playerList[tokenID].selection = message.toString();
+      console.log(playerList);
+
       wss.clients.forEach((client) => {
         client.send(JSON.stringify(message.toString()));
       });
     });
 
     ws.on("close", () => {
-      console.log("Client disconnected");
+      delete playerList[tokenID];
+      console.log(`User ${tokenID} disconnected`);
     });
   });
 
