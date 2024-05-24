@@ -1,8 +1,14 @@
 import WebSocket from "ws";
-import { getWeatherBatch, generateQuestionData, PlayerList } from "./session";
+import {
+  getWeatherBatch,
+  generateQuestionData,
+  PlayerList,
+  scoreAnswers,
+  getAnswer,
+} from "./session";
 import { Question } from "./question";
 
-const playerList: PlayerList = {};
+let playerList: PlayerList = {};
 
 export const webSocketServer = () => {
   const wss = new WebSocket.Server({ noServer: true, clientTracking: true });
@@ -23,7 +29,7 @@ export const webSocketServer = () => {
 
     getWeatherBatch().then((data) => {
       const questionData = generateQuestionData(data);
-      
+
       question = questionData.question;
       answerOptions = questionData.answerOptions;
       questionString = questionData.questionString;
@@ -38,6 +44,14 @@ export const webSocketServer = () => {
         decrementCountdown();
       } else {
         clearInterval(countdownInterval);
+        if (question !== null) {
+          playerList = scoreAnswers(playerList, question);
+          const answer = getAnswer(question);
+          wss.clients.forEach((client) => {
+            client.send(JSON.stringify({ answer }));
+          });
+          console.log(playerList);
+        }
         setTimeout(() => {
           incrementRound(); // Increment round
           countdownValue = 60; // Reset countdown value

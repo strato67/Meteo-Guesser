@@ -66,7 +66,11 @@ describe("Score answers of round", () => {
     question.generateQuestion();
     console.log(question.getQuestionType());
     if (question.getQuestionType() === "location") {
-      scoreAnswers(testPlayerList, question);
+      const newList = scoreAnswers(testPlayerList, question);
+      expect(newList).toBeDefined()
+      expect(newList["0.7711228137129255"].score).toBe(1000);
+      expect(newList["0.7711228137129255"].selection).toBe("")
+      console.log(newList)
     }
   });
 });

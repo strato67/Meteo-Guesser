@@ -70,6 +70,20 @@ export const generateAnswerOptions = (
 };
 
 export const scoreAnswers = (playerList: PlayerList, question: Question) => {
+  const answer = getAnswer(question);
+
+  for (const playerToken in playerList) {
+    const player = playerList[playerToken];
+    if (player.selection == answer) {
+      player.score += 1000;
+    }
+    player.selection = "";
+  }
+
+  return playerList;
+};
+
+export const getAnswer = (question: Question) => {
   const questionType = question.getQuestionType();
 
   const possibleAnswers: { [key: string]: string | number } = {
@@ -79,11 +93,7 @@ export const scoreAnswers = (playerList: PlayerList, question: Question) => {
   };
 
   if (!questionType || !possibleAnswers.hasOwnProperty(questionType)) {
-    return playerList;
+    return;
   }
-  const answer = possibleAnswers[questionType];
-
-  for (const player in playerList) {
-    console.log(player)
-  }
+  return possibleAnswers[questionType];
 };
