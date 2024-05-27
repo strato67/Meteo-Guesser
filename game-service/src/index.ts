@@ -27,6 +27,7 @@ server.on('upgrade', (request, socket, head) => {
 
   if (!webSocketServers[pathname]) {
     webSocketServers[pathname] = webSocketServer();
+    console.log(`${Object.keys(webSocketServers).length} server(s) active.`)
   }
 
   const wss = webSocketServers[pathname];

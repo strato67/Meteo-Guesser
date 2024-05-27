@@ -96,6 +96,10 @@ export const webSocketServer = () => {
       startRound();
     }
 
+    // Need to handle end of game scenario
+    if (round > MAX_ROUNDS) {
+    }
+
     ws.on("message", (message: string) => {
       console.log(`Received message: ${message} from ${tokenID}`);
 
