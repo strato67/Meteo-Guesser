@@ -1,6 +1,7 @@
 import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { Separator } from "@radix-ui/react-dropdown-menu";
+import React from "react";
 
 export default function ScoreCard() {
 
@@ -8,7 +9,7 @@ export default function ScoreCard() {
 
     return (
 
-        <Card className="w-96">
+        <Card className="w-96 bg-secondary">
             <CardHeader>
                 <CardTitle className="text-xl">Answer:</CardTitle>
             </CardHeader>
@@ -17,13 +18,13 @@ export default function ScoreCard() {
                 <ScrollArea >
                     <div className="p-4">
                         <h4 className="mb-4 text-sm font-medium leading-none">Scoreboard</h4>
-                        {tags.map((tag) => (
-                            <>
-                                <div key={tag} className="text-lg">
+                        {tags.map((tag, index) => (
+                            <React.Fragment key={index}>
+                                <div key={index} className="text-lg">
                                     {tag}
                                 </div>
                                 <Separator className="my-2" />
-                            </>
+                            </React.Fragment>
                         ))}
                     </div>
                 </ScrollArea>

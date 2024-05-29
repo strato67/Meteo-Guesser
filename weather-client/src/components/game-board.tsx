@@ -5,12 +5,12 @@ export default function GameBoard({
     selection,
     options,
     setSelection,
-    setAnswer,
+    setUserAnswer,
 }: {
     selection: number | null;
     options: string[];
     setSelection: (index: number) => void;
-    setAnswer: (index: string) => void;
+    setUserAnswer: (index: string) => void;
 }) {
     const cardColors = [
         "bg-red-500",
@@ -27,7 +27,7 @@ export default function GameBoard({
                     className="h-full"
                     onClick={() => {
                         setSelection(index);
-                        setAnswer(options[index]);
+                        setUserAnswer(options[index]);
                     }}
                 >
                     <CardComponent

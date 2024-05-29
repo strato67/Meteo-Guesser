@@ -20,7 +20,7 @@ export default function Page() {
 
     const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
     const [selection, setSelection] = useState<number | null>(null);
-    const [answer, setAnswer] = useState<string>("");
+    const [userAnswer, setUserAnswer] = useState<string>("");
     const [timer, setTimer] = useState<number>(60);
     const [intermission, setIntermission] = useState<boolean>(false);
     const [question, setQuestion] = useState<string>("");
@@ -28,10 +28,10 @@ export default function Page() {
     const [round, setRound] = useState<number>(1);
 
     useEffect(() => {
-        if (answer !== "") {
-            sendMessage(answer!.toString());
+        if (userAnswer !== "") {
+            sendMessage(userAnswer!.toString());
         }
-    }, [answer, sendMessage]);
+    }, [userAnswer, sendMessage]);
 
     useEffect(() => {
         const parseMessage = (message: string) => {
@@ -96,12 +96,12 @@ export default function Page() {
     return (
         <>
 
-            <div className="relative w-full items-center h-screen z-0">
-                <div className="w-full h-screen flex items-center justify-center  backdrop-blur-xl bg-secondary/70 opacity-100">
+            <div className="relative w-full items-center h-screen ">
+                <div className={`w-full h-screen flex items-center justify-center opacity-100 z-20 ${intermission? 'absolute' : 'hidden'}`}>
                     <Scorecard />
                 </div>
 
-                <div className="flex flex-col w-full items-center mt-16 gap-4 absolute inset-x-0 top-0 h-2/3 opacity-0">
+                <div className={`flex flex-col w-full items-center mt-16 gap-4 absolute inset-x-0 top-0 h-2/3 z-10 ${intermission ? 'blur-sm' : ''}`}>
                     <div className="text-xl font-semibold">{round}/10</div>
                     <h1 className="text-3xl text-center font-bold">{question}</h1>
                     <div className="border-t border-stone w-full"></div>
@@ -129,7 +129,7 @@ export default function Page() {
                         selection={selection}
                         setSelection={setSelection}
                         options={options}
-                        setAnswer={setAnswer}
+                        setUserAnswer={setUserAnswer}
                     />}
                 </div>
             </div>
