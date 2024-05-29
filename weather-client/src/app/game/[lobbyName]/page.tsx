@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import useTempConversion from "@/hooks/useTempConversion";
+import Scorecard from "@/components/scorecard";
+
 
 export default function Page() {
     const { lobbyName } = useParams();
@@ -22,50 +24,58 @@ export default function Page() {
     const [timer, setTimer] = useState<number>(60);
     const [intermission, setIntermission] = useState<boolean>(false);
     const [question, setQuestion] = useState<string>("");
-    const [options, setOptions] = useState<string[]>([]);
+    const [options, setOptions] = useState<string[]>(["", "", "", ""]);
     const [round, setRound] = useState<number>(1);
 
     useEffect(() => {
         if (answer !== "") {
             sendMessage(answer!.toString());
         }
-    }, [answer, sendMessage, setAnswer]);
+    }, [answer, sendMessage]);
 
     useEffect(() => {
         const parseMessage = (message: string) => {
             const parsedMessage = JSON.parse(message);
             if (parsedMessage.countdown !== undefined) {
                 setTimer(parsedMessage.countdown);
+
+                if (parsedMessage.countdown === 0) {
+                    setIntermission(true)
+                }
+
             }
 
             if (parsedMessage.round !== undefined) {
                 setRound(parsedMessage.round);
+                setIntermission(false)
             }
 
             if (parsedMessage.questionString !== undefined) {
-                const tempValueMatch = parsedMessage.questionString.match(/[\d.]+/g);
-                if (tempValueMatch) {
-                    const t = convertTemp(parsedMessage.questionString);
-                    const tempValue = parseFloat(tempValueMatch.at(-1));
-                    const celsiusValue = (tempValue - 273).toFixed(2);
-                    parsedMessage.questionString = t;
-                }
 
-                setQuestion(parsedMessage.questionString);
+                const temp = convertTemp(parsedMessage.questionString);
+                setQuestion(temp);
+
             }
 
             if (parsedMessage.answerOptions !== undefined) {
-                setOptions(parsedMessage.answerOptions);
+
+                setOptions((prevOptions) => {
+                    if (JSON.stringify(prevOptions) !== JSON.stringify(parsedMessage.answerOptions)) {
+                        return parsedMessage.answerOptions;
+                    }
+                    return prevOptions;
+                });
             }
+
         };
 
         const message = lastMessage?.data;
-        console.log(message);
 
         if (message) {
+            console.log(message);
             parseMessage(message);
         }
-    }, [convertTemp, lastMessage]);
+    }, [convertTemp, lastMessage?.data, options]);
 
     const connectionStatus = {
         [ReadyState.CONNECTING]: "Connecting",
@@ -85,8 +95,13 @@ export default function Page() {
 
     return (
         <>
+
             <div className="relative w-full items-center h-screen z-0">
-                <div className="flex flex-col w-full items-center mt-16 gap-4 absolute inset-x-0 top-0 h-2/3">
+                <div className="w-full h-screen flex items-center justify-center  backdrop-blur-xl bg-secondary/70 opacity-100">
+                    <Scorecard />
+                </div>
+
+                <div className="flex flex-col w-full items-center mt-16 gap-4 absolute inset-x-0 top-0 h-2/3 opacity-0">
                     <div className="text-xl font-semibold">{round}/10</div>
                     <h1 className="text-3xl text-center font-bold">{question}</h1>
                     <div className="border-t border-stone w-full"></div>
@@ -110,12 +125,12 @@ export default function Page() {
                 </div>
 
                 <div className="absolute inset-x-0 bottom-0 h-1/3">
-                    <GameBoard
+                    {!intermission && options && <GameBoard
                         selection={selection}
                         setSelection={setSelection}
                         options={options}
                         setAnswer={setAnswer}
-                    />
+                    />}
                 </div>
             </div>
         </>
