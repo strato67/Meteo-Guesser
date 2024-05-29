@@ -1,4 +1,5 @@
 import { Card, CardTitle } from "./ui/card";
+import useTempConversion from "@/hooks/useTempConversion";
 
 export default function GameBoard({
     selection,
@@ -49,6 +50,16 @@ function CardComponent({
     option: string;
     activeSelection?: boolean;
 }) {
+    const { convertTemp } = useTempConversion();
+    let convertedTemp;
+
+    try {
+        convertedTemp = convertTemp(String(option));
+    } catch (error) {
+        console.error("Conversion error:", error);
+        convertedTemp = option ?? '';
+    }
+
     return (
         <Card
             className={`p-6 ${color} h-full text-white hover:scale-[1.01] ${activeSelection ? "border-4 border-indigo-700" : ""
@@ -56,7 +67,7 @@ function CardComponent({
         >
             <div className="grid content-center justify-items-center h-full">
                 <CardTitle className="md:text-2xl text-lg font-bold text-ellipsis overflow-hidden w-full  select-none">
-                    {option}
+                    {convertedTemp}
                 </CardTitle>
             </div>
         </Card>
