@@ -21,6 +21,7 @@ export default function Page() {
     const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
     const [selection, setSelection] = useState<number | null>(null);
     const [userAnswer, setUserAnswer] = useState<string>("");
+    const [serverResult, setServerResult] = useState<string>("")
     const [timer, setTimer] = useState<number>(60);
     const [intermission, setIntermission] = useState<boolean>(false);
     const [question, setQuestion] = useState<string>("");
@@ -40,7 +41,11 @@ export default function Page() {
                 setTimer(parsedMessage.countdown);
 
                 if (parsedMessage.countdown === 0) {
-                    setIntermission(true)
+
+                    setTimeout(() => {
+                        setIntermission(true)
+                    }, 1000);
+
                 }
 
             }
@@ -48,6 +53,7 @@ export default function Page() {
             if (parsedMessage.round !== undefined) {
                 setRound(parsedMessage.round);
                 setIntermission(false)
+                setSelection(null)
             }
 
             if (parsedMessage.questionString !== undefined) {
@@ -55,6 +61,10 @@ export default function Page() {
                 const temp = convertTemp(parsedMessage.questionString);
                 setQuestion(temp);
 
+            }
+
+            if (parsedMessage.answer !== undefined) {
+                setServerResult(parsedMessage.answer);
             }
 
             if (parsedMessage.answerOptions !== undefined) {
@@ -97,8 +107,8 @@ export default function Page() {
         <>
 
             <div className="relative w-full items-center h-screen ">
-                <div className={`w-full h-screen flex items-center justify-center opacity-100 z-20 ${intermission? 'absolute' : 'hidden'}`}>
-                    <Scorecard />
+                <div className={`w-full h-screen flex items-center justify-center opacity-100 z-20 ${intermission ? 'absolute' : 'hidden'}`}>
+                    <Scorecard serverResult={serverResult} />
                 </div>
 
                 <div className={`flex flex-col w-full items-center mt-16 gap-4 absolute inset-x-0 top-0 h-2/3 z-10 ${intermission ? 'blur-sm' : ''}`}>

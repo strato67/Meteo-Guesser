@@ -1,17 +1,29 @@
+import React from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { Separator } from "@radix-ui/react-dropdown-menu";
-import React from "react";
+import useTempConversion from "@/hooks/useTempConversion";
 
-export default function ScoreCard() {
+
+export default function ScoreCard({serverResult}:{serverResult:string}) {
 
     const tags = ["d","d","d","d"]
+    const { convertTemp } = useTempConversion();
+    let convertedTemp;
+
+    try {
+        convertedTemp = convertTemp(String(serverResult));
+    } catch (error) {
+        console.error("Conversion error:", error);
+        convertedTemp = serverResult ?? '';
+    }
+
 
     return (
 
         <Card className="w-96 bg-secondary">
             <CardHeader>
-                <CardTitle className="text-xl">Answer:</CardTitle>
+                <CardTitle className="text-xl">Answer: {convertedTemp}</CardTitle>
             </CardHeader>
             <CardContent>
 
