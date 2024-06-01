@@ -13,6 +13,7 @@ let playerList: PlayerList = {};
 export const webSocketServer = () => {
   const wss = new WebSocket.Server({ noServer: true, clientTracking: true });
   const MAX_ROUNDS = 10;
+  const LOBBY_SIZE = 2;
 
   let countdownInterval: NodeJS.Timeout | undefined;
   let countdownValue = 60;
@@ -80,12 +81,15 @@ export const webSocketServer = () => {
 
   wss.on("connection", (ws: WebSocket, req) => {
     const url = new URL(req.url || "", `http://${req.headers.host}`);
-
     const tokenID = url.search.replace("?token=", "");
-    playerList[tokenID] = { selection: "", score: 0 };
-    console.log(`User ${tokenID} joined.`);
+    if (Object.keys(playerList).length <= LOBBY_SIZE) {
+      playerList[tokenID] = { selection: "", score: 0 };
+      console.log(`User ${tokenID} joined.`);
+      console.log(playerList);
+    } else {
+      ws.close(1000, "Server full.");
+    }
 
-    console.log(playerList);
     if (question !== null) {
       wss.clients.forEach((client) => {
         client.send(JSON.stringify({ round, questionString, answerOptions }));
