@@ -11,22 +11,22 @@ import { useParams } from "next/navigation";
 import useTempConversion from "@/hooks/useTempConversion";
 import Scorecard from "@/components/scorecard";
 
-
 export default function Page() {
     const { lobbyName } = useParams();
     const { convertTemp } = useTempConversion();
-    const [id, setId] = useState(Math.random());
+    const [id, setId] = useState(String(Math.random()));
     const socketUrl = `ws://localhost:8080/${lobbyName}/?token=${id}`;
 
     const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
     const [selection, setSelection] = useState<number | null>(null);
     const [userAnswer, setUserAnswer] = useState<string>("");
-    const [serverResult, setServerResult] = useState<string>("")
+    const [serverResult, setServerResult] = useState<string>("");
     const [timer, setTimer] = useState<number>(60);
     const [intermission, setIntermission] = useState<boolean>(false);
     const [question, setQuestion] = useState<string>("");
     const [options, setOptions] = useState<string[]>(["", "", "", ""]);
     const [round, setRound] = useState<number>(1);
+    const [playerList, setPlayerList] = useState({});
 
     useEffect(() => {
         if (userAnswer !== "") {
@@ -41,26 +41,21 @@ export default function Page() {
                 setTimer(parsedMessage.countdown);
 
                 if (parsedMessage.countdown === 0) {
-
                     setTimeout(() => {
-                        setIntermission(true)
+                        setIntermission(true);
                     }, 1000);
-
                 }
-
             }
 
             if (parsedMessage.round !== undefined) {
                 setRound(parsedMessage.round);
-                setIntermission(false)
-                setSelection(null)
+                setIntermission(false);
+                setSelection(null);
             }
 
             if (parsedMessage.questionString !== undefined) {
-
                 const temp = convertTemp(parsedMessage.questionString);
                 setQuestion(temp);
-
             }
 
             if (parsedMessage.answer !== undefined) {
@@ -68,15 +63,28 @@ export default function Page() {
             }
 
             if (parsedMessage.answerOptions !== undefined) {
-
                 setOptions((prevOptions) => {
-                    if (JSON.stringify(prevOptions) !== JSON.stringify(parsedMessage.answerOptions)) {
+                    if (
+                        JSON.stringify(prevOptions) !==
+                        JSON.stringify(parsedMessage.answerOptions)
+                    ) {
                         return parsedMessage.answerOptions;
                     }
                     return prevOptions;
                 });
             }
 
+            if (parsedMessage.playerList !== undefined) {
+                setPlayerList((prevList) => {
+                    if (
+                        JSON.stringify(prevList) !==
+                        JSON.stringify(parsedMessage.playerList)
+                    ) {
+                        return parsedMessage.playerList;
+                    }
+                    return prevList;
+                });
+            }
         };
 
         const message = lastMessage?.data;
@@ -105,13 +113,22 @@ export default function Page() {
 
     return (
         <>
-
             <div className="relative w-full items-center h-screen ">
-                <div className={`w-full h-screen flex items-center justify-center opacity-100 z-20 ${intermission ? 'absolute' : 'hidden'}`}>
-                    <Scorecard serverResult={serverResult} />
+                <div
+                    className={`w-full h-screen flex items-center justify-center opacity-100 z-20 ${intermission ? "absolute" : "hidden"
+                        }`}
+                >
+                    <Scorecard
+                        serverResult={serverResult}
+                        playerList={playerList}
+                        id={id}
+                    />
                 </div>
 
-                <div className={`flex flex-col w-full items-center mt-16 gap-4 absolute inset-x-0 top-0 h-2/3 z-10 ${intermission ? 'blur-sm' : ''}`}>
+                <div
+                    className={`flex flex-col w-full items-center mt-16 gap-4 absolute inset-x-0 top-0 h-2/3 z-10 ${intermission ? "blur-sm" : ""
+                        }`}
+                >
                     <div className="text-xl font-semibold">{round}/10</div>
                     <h1 className="text-3xl text-center font-bold">{question}</h1>
                     <div className="border-t border-stone w-full"></div>
@@ -135,12 +152,14 @@ export default function Page() {
                 </div>
 
                 <div className="absolute inset-x-0 bottom-0 h-1/3">
-                    {!intermission && options && <GameBoard
-                        selection={selection}
-                        setSelection={setSelection}
-                        options={options}
-                        setUserAnswer={setUserAnswer}
-                    />}
+                    {!intermission && options && (
+                        <GameBoard
+                            selection={selection}
+                            setSelection={setSelection}
+                            options={options}
+                            setUserAnswer={setUserAnswer}
+                        />
+                    )}
                 </div>
             </div>
         </>

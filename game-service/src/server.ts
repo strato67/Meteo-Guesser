@@ -48,7 +48,7 @@ export const webSocketServer = () => {
           playerList = scoreAnswers(playerList, question);
           const answer = getAnswer(question);
           wss.clients.forEach((client) => {
-            client.send(JSON.stringify({ answer }));
+            client.send(JSON.stringify({ answer, playerList }));
           });
           console.log(playerList);
         }
