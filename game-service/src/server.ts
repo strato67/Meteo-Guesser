@@ -8,12 +8,11 @@ import {
 } from "./session";
 import { Question } from "./question";
 
-let playerList: PlayerList = {};
-
 export const webSocketServer = () => {
   const wss = new WebSocket.Server({ noServer: true, clientTracking: true });
   const MAX_ROUNDS = 10;
-  const LOBBY_SIZE = 2;
+  const LOBBY_SIZE = 8;
+  let playerList: PlayerList = {};
 
   let countdownInterval: NodeJS.Timeout | undefined;
   let countdownValue = 60;

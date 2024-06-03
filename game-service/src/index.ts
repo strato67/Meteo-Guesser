@@ -34,4 +34,18 @@ server.on('upgrade', (request, socket, head) => {
   wss.handleUpgrade(request, socket, head, (ws: WebSocket) => {
     wss.emit('connection', ws, request);
   });
+
 });
+
+const removeEmptyServers = () => {
+  for(const [id, server] of Object.entries(webSocketServers)){
+    if(server.clients.size === 0){
+      server.close(()=>{
+        delete webSocketServers[id]
+        console.log(`Removed server ${id} for inactivity.`)
+      })
+    }
+  }
+};
+
+setInterval(removeEmptyServers, 30000)
