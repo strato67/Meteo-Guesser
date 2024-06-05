@@ -10,7 +10,7 @@ import { Question } from "./question";
 
 export const webSocketServer = () => {
   const wss = new WebSocket.Server({ noServer: true });
-  const MAX_ROUNDS = 1;
+  const MAX_ROUNDS = 10;
   const LOBBY_SIZE = 8;
   let playerList: PlayerList = {};
 
