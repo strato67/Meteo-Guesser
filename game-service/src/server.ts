@@ -9,8 +9,8 @@ import {
 import { Question } from "./question";
 
 export const webSocketServer = () => {
-  const wss = new WebSocket.Server({ noServer: true, clientTracking: true });
-  const MAX_ROUNDS = 10;
+  const wss = new WebSocket.Server({ noServer: true });
+  const MAX_ROUNDS = 1;
   const LOBBY_SIZE = 8;
   let playerList: PlayerList = {};
 
@@ -22,9 +22,22 @@ export const webSocketServer = () => {
   let answerOptions: string[] | number[] = [];
   let questionString: string = "";
 
+  const terminateServer = () => {
+    wss.clients.forEach((client) => {
+      client.send(JSON.stringify({ gameOver: true }));
+      client.close();
+
+      process.nextTick(() => {
+        if (client.OPEN || client.CLOSING) {
+          client.terminate();
+        }
+      });
+    });
+  };
+
   function startRound() {
     if (round > MAX_ROUNDS) {
-      return;
+      terminateServer();
     }
 
     getWeatherBatch().then((data) => {
@@ -71,7 +84,7 @@ export const webSocketServer = () => {
   const incrementRound = () => {
     round++;
     if (round > MAX_ROUNDS) {
-      return;
+      terminateServer();
     }
     wss.clients.forEach((client) => {
       client.send(JSON.stringify({ round }));
@@ -97,10 +110,6 @@ export const webSocketServer = () => {
 
     if (!countdownInterval && round <= MAX_ROUNDS) {
       startRound();
-    }
-
-    // Need to handle end of game scenario
-    if (round > MAX_ROUNDS) {
     }
 
     ws.on("message", (message: string) => {

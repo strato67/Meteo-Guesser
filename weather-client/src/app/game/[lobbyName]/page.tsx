@@ -27,6 +27,7 @@ export default function Page() {
     const [options, setOptions] = useState<string[]>(["", "", "", ""]);
     const [round, setRound] = useState<number>(1);
     const [playerList, setPlayerList] = useState({});
+    const [gameOver, setGameOver] = useState(false);
 
     useEffect(() => {
         if (userAnswer !== "") {
@@ -85,6 +86,10 @@ export default function Page() {
                     return prevList;
                 });
             }
+
+            if (parsedMessage.gameOver) {
+                setGameOver(true);
+            }
         };
 
         const message = lastMessage?.data;
@@ -107,7 +112,7 @@ export default function Page() {
         return <LoadingGame />;
     }
 
-    if (connectionStatus === "Closed") {
+    if (connectionStatus === "Closed" && !gameOver) {
         return <ConnectionFailed />;
     }
 
@@ -133,7 +138,7 @@ export default function Page() {
                     <h1 className="text-3xl text-center font-bold">{question}</h1>
                     <div className="border-t border-stone w-full"></div>
                     <div className="grid grid-cols-3 justify-items-center w-full place-items-center h-1/2">
-                        <div className="justify-self-center pt-8 bg-indigo-700 rounded-full h-24 text-center w-24 font-semibold text-2xl text-white">
+                        <div className="justify-self-center pt-8 bg-indigo-700 rounded-full h-24 text-center w-24 font-semibold text-2xl text-white select-none">
                             {timer}
                         </div>
                         <Image

@@ -1,8 +1,11 @@
 import React from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
+import { Button } from "./ui/button";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import useTempConversion from "@/hooks/useTempConversion";
+import Link from "next/link";
+import { resetGlobalState } from "react-use-websocket";
 
 type PlayerScore = { selection: string; score: number };
 
@@ -39,25 +42,34 @@ export default function ScoreCard({
                 <CardTitle className="text-xl">Answer: {convertedTemp}</CardTitle>
             </CardHeader>
             <CardContent>
-                <ScrollArea>
+                <ScrollArea className="h-max-96">
                     <div className="p-4">
                         <h4 className="mb-4 text-sm font-medium leading-none">
                             Scoreboard
                         </h4>
                         {sortedPlayers.map(([key, player], index) => (
                             <React.Fragment key={index}>
-                                <div className={`text-sm ${key === id ? 'text-green-500 font-semibold' : ''}`}>
+                                <div
+                                    className={`text-sm ${key === id ? "text-green-500 font-semibold" : ""
+                                        }`}
+                                >
                                     <div className="grid grid-cols-2">
                                         <div>{key}</div>
                                         <div className="justify-self-end">{player.score}</div>
                                     </div>
-
                                 </div>
                                 <Separator className="my-3" />
-
-                                
                             </React.Fragment>
                         ))}
+
+                        <Button
+                            asChild
+                            className="self-center p-6 mt-6 w-full"
+                            variant={"destructive"}
+                            onClick={() => resetGlobalState("ws://localhost:8080/")}
+                        >
+                            <Link href="/">Leave Game</Link>
+                        </Button>
                     </div>
                 </ScrollArea>
             </CardContent>

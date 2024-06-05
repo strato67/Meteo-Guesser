@@ -48,4 +48,4 @@ const removeEmptyServers = () => {
   }
 };
 
-setInterval(removeEmptyServers, 30000)
+setInterval(removeEmptyServers, 15000)
