@@ -50,6 +50,7 @@ def get_location_batch():
     location_batch = redis_cli.mget(query_list)
     parsed_data = []
     for item in location_batch:
+
         json_str = item.decode('utf-8')
         parsed_data.append(json.loads(json_str))
     

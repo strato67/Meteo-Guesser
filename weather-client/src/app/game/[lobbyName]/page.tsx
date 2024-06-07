@@ -10,6 +10,8 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import useTempConversion from "@/hooks/useTempConversion";
 import Scorecard from "@/components/scorecard";
+import { ClipboardCopyIcon } from "@radix-ui/react-icons";
+import GameCodeButton from "@/components/game-code-button";
 
 export default function Page() {
     const { lobbyName } = useParams();
@@ -147,12 +149,7 @@ export default function Page() {
                             height={256}
                             alt=""
                         />
-                        <Button
-                            onClick={() => sendMessage("answer")}
-                            className="w-24 py-6  text-xl"
-                        >
-                            Skip
-                        </Button>
+                        <GameCodeButton lobbyName={lobbyName}/>
                     </div>
                 </div>
 
