@@ -9,8 +9,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Switch } from "@/components/ui/switch";
+import useTempConversion from "@/hooks/useTempConversion";
 
 export default function SettingsDropdown() {
+
+  const {fahrenheit, setFahrenheit} = useTempConversion();
+
   return (
     <>
       <DropdownMenu>
@@ -26,7 +30,7 @@ export default function SettingsDropdown() {
             <div className="flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm w-full justify-between">
               <p>Temperature</p>
               <p className="self-end">
-                °C <Switch className="" /> °F
+                °C <Switch className="" checked={fahrenheit} onCheckedChange={()=>setFahrenheit(!fahrenheit)}/> °F
               </p>
             </div>
           </DropdownMenuGroup>
