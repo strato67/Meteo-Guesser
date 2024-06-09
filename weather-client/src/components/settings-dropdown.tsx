@@ -4,10 +4,8 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Switch } from "@/components/ui/switch";
@@ -38,12 +36,3 @@ export default function SettingsDropdown() {
   );
 }
 
-function TemperatureToggle() {
-  return (
-    <>
-      <div className="flex items-center space-x-2">
-        <Switch />
-      </div>
-    </>
-  );
-}
