@@ -7,14 +7,13 @@ import LoadingGame from "@/components/loading-game";
 import ConnectionFailed from "@/components/connection-failed";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import useTempConversion from "@/hooks/useTempConversion";
 import Scorecard from "@/components/scorecard";
 import GameCodeButton from "@/components/game-code-button";
 import SettingsDropdown from "@/components/settings-dropdown";
+import { convertTemp } from "./unitConvert";
 
 export default function Page() {
   const { lobbyName } = useParams();
-  const { convertTemp } = useTempConversion();
   const [id, setId] = useState(String(Math.random()));
   const socketUrl = `ws://localhost:8080/${lobbyName}/?token=${id}`;
 
@@ -29,6 +28,7 @@ export default function Page() {
   const [round, setRound] = useState<number>(1);
   const [playerList, setPlayerList] = useState({});
   const [gameOver, setGameOver] = useState(false);
+  const [fahrenheit, setFahrenheit] = useState(false);
 
   useEffect(() => {
     if (userAnswer !== "") {
@@ -56,8 +56,7 @@ export default function Page() {
       }
 
       if (parsedMessage.questionString !== undefined) {
-        const temp = convertTemp(parsedMessage.questionString);
-        setQuestion(temp);
+        setQuestion(parsedMessage.questionString);
       }
 
       if (parsedMessage.answer !== undefined) {
@@ -99,7 +98,7 @@ export default function Page() {
       console.log(message);
       parseMessage(message);
     }
-  }, [convertTemp, lastMessage?.data, options]);
+  }, [lastMessage?.data, options]);
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: "Connecting",
@@ -129,6 +128,7 @@ export default function Page() {
             serverResult={serverResult}
             playerList={playerList}
             id={id}
+            fahrenheit={fahrenheit}
           />
         </div>
 
@@ -138,10 +138,10 @@ export default function Page() {
           }`}
         >
           <div className="text-xl font-semibold">{round}/10</div>
-          <h1 className="text-3xl text-center font-bold">{question}</h1>
+          <h1 className="text-3xl text-center font-bold">{convertTemp(question, fahrenheit)}</h1>
           <div className="border-t border-stone w-full"></div>
           <div className="mr-4 self-end">
-            <SettingsDropdown />
+            <SettingsDropdown fahrenheit={fahrenheit} setFahrenheit={setFahrenheit}/>
           </div>
 
           <div className="grid grid-cols-3 justify-items-center w-full place-items-center h-1/2">
@@ -162,9 +162,11 @@ export default function Page() {
           {!intermission && options && (
             <GameBoard
               selection={selection}
-              setSelection={setSelection}
               options={options}
+              fahrenheit={fahrenheit}
+              setSelection={setSelection}
               setUserAnswer={setUserAnswer}
+
             />
           )}
         </div>

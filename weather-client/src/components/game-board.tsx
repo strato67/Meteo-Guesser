@@ -1,16 +1,20 @@
 import { Card, CardTitle } from "./ui/card";
-import useTempConversion from "@/hooks/useTempConversion";
+import { convertTemp } from "@/app/game/[lobbyName]/unitConvert";
 
 export default function GameBoard({
     selection,
     options,
+    fahrenheit,
     setSelection,
     setUserAnswer,
+
 }: {
     selection: number | null;
     options: string[];
+    fahrenheit: boolean;
     setSelection: (index: number) => void;
     setUserAnswer: (index: string) => void;
+
 }) {
     const cardColors = [
         "bg-red-500",
@@ -34,6 +38,7 @@ export default function GameBoard({
                         color={color}
                         activeSelection={selection == index}
                         option={options[index]}
+                        fahrenheit={fahrenheit}
                     />
                 </div>
             ))}
@@ -45,20 +50,14 @@ function CardComponent({
     color,
     option,
     activeSelection,
+    fahrenheit,
 }: {
     color: string;
     option: string;
     activeSelection?: boolean;
+    fahrenheit:boolean;
 }) {
-    const { convertTemp } = useTempConversion();
-    let convertedTemp;
 
-    try {
-        convertedTemp = convertTemp(String(option));
-    } catch (error) {
-        console.error("Conversion error:", error);
-        convertedTemp = option ?? '';
-    }
 
     return (
         <Card
@@ -67,7 +66,7 @@ function CardComponent({
         >
             <div className="grid content-center justify-items-center h-full">
                 <CardTitle className="md:text-2xl text-lg font-bold text-ellipsis overflow-hidden w-full  select-none">
-                    {convertedTemp}
+                    {convertTemp(String(option),fahrenheit)}
                 </CardTitle>
             </div>
         </Card>

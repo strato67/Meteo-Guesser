@@ -3,9 +3,9 @@ import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { Separator } from "@radix-ui/react-dropdown-menu";
-import useTempConversion from "@/hooks/useTempConversion";
 import Link from "next/link";
 import { resetGlobalState } from "react-use-websocket";
+import { convertTemp } from "@/app/game/[lobbyName]/unitConvert";
 
 type PlayerScore = { selection: string; score: number };
 
@@ -17,29 +17,21 @@ export default function ScoreCard({
     serverResult,
     playerList,
     id,
+    fahrenheit
 }: {
     serverResult: string;
     playerList: PlayerList;
     id: string;
+    fahrenheit:boolean;
 }) {
     const sortedPlayers = Object.entries(playerList).sort(
         ([, a], [, b]) => b.score - a.score
     );
 
-    const { convertTemp } = useTempConversion();
-    let convertedTemp;
-
-    try {
-        convertedTemp = convertTemp(String(serverResult));
-    } catch (error) {
-        console.error("Conversion error:", error);
-        convertedTemp = serverResult ?? "";
-    }
-
     return (
         <Card className="w-96 bg-secondary">
             <CardHeader>
-                <CardTitle className="text-xl">Answer: {convertedTemp}</CardTitle>
+                <CardTitle className="text-xl">Answer: {convertTemp(String(serverResult), fahrenheit)}</CardTitle>
             </CardHeader>
             <CardContent>
                 <ScrollArea className="h-max-96">
