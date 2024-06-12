@@ -9,13 +9,24 @@ import {
 } from "./ui/card";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { ArrowLeftIcon } from "@radix-ui/react-icons";
+import Link from "next/link";
 
 export default function JoinGameCard() {
     return (
         <>
-            <Card className="w-96 bg-secondary">
+            <Card className="w-96 bg-secondary ">
                 <CardHeader>
-                    <CardTitle className="text-xl">Join a Game</CardTitle>
+                    <div className="flex items-baseline gap-2">
+                        <Button variant="link" size="icon" asChild className=" bg-secondary rounded-lg hover:bg-background">
+                            <Link href={"/"}>
+                                <ArrowLeftIcon />
+                            </Link>
+                        </Button>
+
+                        <CardTitle className="text-xl">Join a Game</CardTitle>
+                    </div>
+
                     <CardDescription>
                         Enter a game code and play with your friends!
                     </CardDescription>
@@ -30,14 +41,19 @@ export default function JoinGameCard() {
                                     placeholder="Enter a game code"
                                     className=" border-primary"
                                     required
-                                    
                                 />
                             </div>
                         </div>
                     </form>
                 </CardContent>
-                <CardFooter>
-                    <Button className="w-full" onClick={()=>console.log()} >Join Game</Button>
+                <CardFooter className="gap-2">
+                    <Button variant={"destructive"} className="w-full py-5 " asChild>
+                        <Link href={"/"}>Cancel</Link>
+                        
+                    </Button>
+                    <Button className="w-full py-5" onClick={() => console.log()}>
+                        Join Game
+                    </Button>
                 </CardFooter>
             </Card>
         </>
