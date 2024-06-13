@@ -12,7 +12,9 @@ import { Button } from "./ui/button";
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 
+
 export default function JoinGameCard() {
+
     return (
         <>
             <Card className="w-96 bg-secondary ">
@@ -23,6 +25,7 @@ export default function JoinGameCard() {
                                 <ArrowLeftIcon />
                             </Link>
                         </Button>
+                        
 
                         <CardTitle className="text-xl">Join a Game</CardTitle>
                     </div>
