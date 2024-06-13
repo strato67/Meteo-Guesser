@@ -231,15 +231,15 @@ Use this space to list resources you find helpful and would like to give credit 
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
+[contributors-shield]: https://img.shields.io/github/contributors/strato67/Meteo-Guesser.svg?style=for-the-badge
 [contributors-url]: https://github.com/strato67/Meteo-Guesser/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
+[forks-shield]: https://img.shields.io/github/forks/strato67/Meteo-Guesser.svg?style=for-the-badge
 [forks-url]: https://github.com/strato67/Meteo-Guesser/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/strato67/Meteo-Guesser.svg?style=for-the-badge
 [stars-url]: https://github.com/strato67/Meteo-Guesser/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
-[issues-url]: https://github.com/othneildrew/Best-README-Template/issues
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
+[issues-shield]: https://img.shields.io/github/issues/strato67/Meteo-Guesser.svg?style=for-the-badge
+[issues-url]: https://github.com/strato67/Meteo-Guesser/issues
+[license-shield]: https://img.shields.io/github/license/strato67/Meteo-Guesser.svg?style=for-the-badge
 [license-url]: https://github.com/strato67/Meteo-Guesser/blob/master/LICENSE.txt
 [product-screenshot]: images/screenshot.png
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
