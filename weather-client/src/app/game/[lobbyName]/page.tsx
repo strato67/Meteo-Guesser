@@ -28,7 +28,11 @@ export default function Page() {
   const [round, setRound] = useState<number>(1);
   const [playerList, setPlayerList] = useState({});
   const [gameOver, setGameOver] = useState(false);
-  const [fahrenheit, setFahrenheit] = useState(false);
+  const [fahrenheit, setFahrenheit] = useState<boolean>(
+    typeof window !== "undefined"
+      ? localStorage.getItem("tempUnit") == "true" || false
+      : false
+  );
 
   useEffect(() => {
     if (userAnswer !== "") {
@@ -138,10 +142,15 @@ export default function Page() {
           }`}
         >
           <div className="text-xl font-semibold">{round}/10</div>
-          <h1 className="text-3xl text-center font-bold">{convertTemp(question, fahrenheit)}</h1>
+          <h1 className="text-3xl text-center font-bold">
+            {convertTemp(question, fahrenheit)}
+          </h1>
           <div className="border-t border-stone w-full"></div>
           <div className="mr-4 self-end">
-            <SettingsDropdown fahrenheit={fahrenheit} setFahrenheit={setFahrenheit}/>
+            <SettingsDropdown
+              fahrenheit={fahrenheit}
+              setFahrenheit={setFahrenheit}
+            />
           </div>
 
           <div className="grid grid-cols-3 justify-items-center w-full place-items-center h-1/2">
@@ -166,7 +175,6 @@ export default function Page() {
               fahrenheit={fahrenheit}
               setSelection={setSelection}
               setUserAnswer={setUserAnswer}
-
             />
           )}
         </div>

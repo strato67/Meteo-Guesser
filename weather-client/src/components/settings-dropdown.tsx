@@ -36,7 +36,9 @@ export default function SettingsDropdown({
                 <Switch
                   className=""
                   checked={fahrenheit}
-                  onCheckedChange={() => setFahrenheit(!fahrenheit)}
+                  onCheckedChange={() => {setFahrenheit(!fahrenheit)
+                  localStorage.setItem("tempUnit",String(!fahrenheit));
+                  }}
                 />{" "}
                 °F
               </p>
