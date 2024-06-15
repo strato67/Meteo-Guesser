@@ -14,7 +14,7 @@ import { convertTemp } from "./unitConvert";
 
 export default function Page() {
   const { lobbyName } = useParams();
-  const [id, setId] = useState(String(Math.random()));
+  const [id, setId] = useState(`Guest_${String(Math.round(Math.random()*10000),)}`);
   const socketUrl = `ws://localhost:8080/${lobbyName}/?token=${id}`;
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
