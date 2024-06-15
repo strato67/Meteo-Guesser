@@ -25,8 +25,7 @@ function LightningIcon(_props: any) {
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
     >
-      <title>lightning [#1262]</title>
-      <desc>Created with Sketch.</desc>
+      <title>Meteo Guesser</title>
       <defs></defs>
       <g
         id="Page-1"
