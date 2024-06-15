@@ -57,6 +57,10 @@ export const webSocketServer = () => {
         decrementCountdown();
       } else {
         clearInterval(countdownInterval);
+        if(Object.keys(playerList).length === 0){
+          terminateServer()
+        }
+        
         if (question !== null) {
           playerList = scoreAnswers(playerList, question);
           const answer = getAnswer(question);
