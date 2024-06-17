@@ -13,11 +13,11 @@ export type PlayerList = {
 
 export const getWeatherBatch = async () => {
   try {
-    const response = await fetch("http://127.0.0.1:4200/");
+    const response = await fetch("http://weather-retriever:4200/");
     const data = await response.json();
     return data.queue;
   } catch (error) {
-    return { error: "Could not get weather data" };
+    return [error];
   }
 };
 
@@ -34,6 +34,7 @@ export const generateQuestionData = (data: Array<WeatherData>) => {
   const answerOptions = generateAnswerOptions(question, data);
 
   return { questionString, question, answerOptions };
+
 };
 
 export const generateAnswerOptions = (

@@ -56,11 +56,3 @@ export class Question {
 
 
 };
-
-
-
-// The weather in __ is $weather and $temperature
-
-// The weather in $location is __ and $temperature
-
-// The weather in $location is $weather and __

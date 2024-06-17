@@ -43,7 +43,21 @@ services:
       - city-gen-service
     environment:
       FLASK_RUN_HOST: 0.0.0.0
-
+  game-service:
+    build:
+      context: ./game-service
+      target: development
+    volumes:
+      - ./game-service:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 8080:8080
+    command: npm run dev
+    depends_on:
+      - redis
+      - city-datastore
+      - city-gen-service
+      - weather-retriever
 volumes:
   mongodata:
     driver: local

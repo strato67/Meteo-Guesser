@@ -1,7 +1,9 @@
 from flask import Flask
+from flask_cors import CORS
 from database import populate_db, get_db_size, get_location_batch
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/')
 def get_weather():
