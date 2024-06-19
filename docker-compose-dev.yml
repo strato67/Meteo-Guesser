@@ -1,30 +1,38 @@
 version: "3.8"
 
 services:
-  city-gen-service:
-    build:
-      context: ./city-gen-service
-      target: development
-    volumes:
-      - ./city-gen-service:/usr/src/app
-      - /usr/src/app/node_modules
-    ports:
-      - 3000:3000
-    command: npm run dev
-    depends_on:
-      - city-datastore
+
   city-datastore:
     build: ./city-datastore
-    restart: unless-stopped
+    restart: always
     ports:
       - 27017:27017
     volumes:
       - mongodata:/data/db
       - ./city-datastore/init.sh:/docker-entrypoint-initdb.d/init.sh
+
+  city-gen-service:
+    build:
+      context: ./city-gen-service
+      target: development
+    restart: always
+    volumes:
+      - ./city-gen-service:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 3000:3000
+    environment:
+      MONGO_URL: city-datastore
+      MONGO_PORT: 27017
+    command: npm run dev
+    depends_on:
+      - city-datastore
+
   redis:
     image: redislabs/redismod
     ports:
       - 6379:6379
+
   weather-retriever:
     build:
       context: ./weather-retriever
@@ -43,6 +51,11 @@ services:
       - city-gen-service
     environment:
       FLASK_RUN_HOST: 0.0.0.0
+      CITY_GEN_URL: city-gen-service
+      CITY_GEN_PORT: 3000
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+
   game-service:
     build:
       context: ./game-service
@@ -53,11 +66,16 @@ services:
     ports:
       - 8080:8080
     command: npm run dev
+    restart: always
+    environment:
+      WEATHER_RETRIEVER_URL: weather-retriever
+      WEATHER_RETRIEVER_PORT: 4200
     depends_on:
       - redis
       - city-datastore
       - city-gen-service
       - weather-retriever
+
 volumes:
   mongodata:
     driver: local

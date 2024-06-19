@@ -4,7 +4,13 @@ import os
 import json
 
 api_key = os.environ["OPENWEATHER_API_KEY"]
-redis_cli = Redis(host="redis", port=6379) 
+city_gen_url = os.environ["CITY_GEN_URL"]
+city_gen_port = os.environ["CITY_GEN_PORT"]
+
+redis_host = os.environ["REDIS_HOST"]
+redis_port = os.environ["REDIS_PORT"]
+
+redis_cli = Redis(host=redis_host, port=int(redis_port)) 
 
 def populate_db():
     input_locations = get_locations()
@@ -30,7 +36,7 @@ def fetch_weather_data(latitude, longitude):
     return current_data
 
 def get_locations():
-    response = requests.get("http://city-gen-service:3000").json()
+    response = requests.get(f"http://{city_gen_url}:{city_gen_port}").json()
 
     location_array = response["coordinates"]
     connection = redis_cli.ping()

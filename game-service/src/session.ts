@@ -1,4 +1,6 @@
 import { Question } from "./question";
+const WEATHER_RETRIEVER_URL: string = `${process.env.WEATHER_RETRIEVER_URL}`;
+const WEATHER_RETRIEVER_PORT: string = `${process.env.WEATHER_RETRIEVER_PORT}`;
 
 type WeatherData = {
   currentWeather: { temperature: number; weather: string };
@@ -13,7 +15,7 @@ export type PlayerList = {
 
 export const getWeatherBatch = async () => {
   try {
-    const response = await fetch("http://weather-retriever:4200/");
+    const response = await fetch(`http://${WEATHER_RETRIEVER_URL}:${WEATHER_RETRIEVER_PORT}/`);
     const data = await response.json();
     return data.queue;
   } catch (error) {

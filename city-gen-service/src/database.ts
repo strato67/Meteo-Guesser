@@ -1,7 +1,8 @@
 import { MongoClient, Document } from "mongodb";
 
-const url: string = "mongodb://city-datastore:27017/";
-const client = new MongoClient(url);
+const url: string = `${process.env.MONGO_URL}`;
+const port: string = `${process.env.MONGO_PORT}`
+const client = new MongoClient(`mongodb://${url}:${port}/`);
 
 export async function getCoordinates() {
     
