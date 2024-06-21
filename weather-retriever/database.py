@@ -2,6 +2,9 @@ from redis import Redis
 import requests
 import os
 import json
+import time
+import random
+from mem_store import backup_db
 
 api_key = os.environ["OPENWEATHER_API_KEY"]
 city_gen_url = os.environ["CITY_GEN_URL"]
@@ -47,20 +50,43 @@ def get_locations():
 def get_db_size():
     return redis_cli.dbsize()
 
-def get_location_batch():  
+def get_location_batch(retries=3, delay=1):
+    db_size = get_db_size()
 
-    db_size = get_db_size()   
+    if db_size == 0:
+        populate_db()
+        db_size = get_db_size()
+        print(f"Database repopulated. New size: {db_size}")
 
-    query_list = [str(x) for x in range(db_size-1, db_size-5, -1)]
+    query_list = [str(x) for x in range(max(0, db_size-5), db_size)]
+    print(f"Query list: {query_list}")
 
-    location_batch = redis_cli.mget(query_list)
-    parsed_data = []
-    for item in location_batch:
+    for attempt in range(retries):
+        location_batch = redis_cli.mget(query_list)
+        print(f"Attempt {attempt + 1}: Location batch: {location_batch}")
+        parsed_data = []
+        all_items_valid = True
 
-        json_str = item.decode('utf-8')
-        parsed_data.append(json.loads(json_str))
-    
-    for i in query_list:
-        redis_cli.delete(str(i))
+        for item in location_batch:
+            if item is not None:
+                try:
+                    json_str = item
+                    parsed_data.append(json.loads(json_str))
+                except json.JSONDecodeError as e:
+                    print(f"Error decoding JSON for item: {item} - {e}")
+                    parsed_data.append(random.choice(backup_db))
+            else:
+                print("Warning: Retrieved None for an item in the query list")
+                all_items_valid = False
+                break
 
-    return parsed_data
+        if all_items_valid:
+
+            for i in query_list:
+                redis_cli.delete(str(i))
+            return parsed_data
+
+        time.sleep(delay)
+
+    print(f"Failed to retrieve valid data after {retries} retries. Returning fallback data.")
+    return [random.choice(backup_db) for _ in query_list]

@@ -14,6 +14,7 @@ def get_weather():
         # location = get_locations()
         populate_db()
         print("Cache database populated", flush=True)
+        db_size = get_db_size()
     location_payload = get_location_batch()
     response = {"queue": location_payload}
     print("Sending weather locations...", flush=True)
@@ -21,5 +22,5 @@ def get_weather():
 
 if __name__ == '__main__':
     from waitress import serve
-    serve(app, host="0.0.0.0", port=4200)
-    #app.run(host="0.0.0.0", port=4200, debug=True)
+    #serve(app, host="0.0.0.0", port=4200)
+    app.run(host="0.0.0.0", port=4200, debug=True)
