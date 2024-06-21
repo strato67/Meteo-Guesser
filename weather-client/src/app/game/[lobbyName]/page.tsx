@@ -15,7 +15,7 @@ import { convertTemp } from "./unitConvert";
 export default function Page() {
   const { lobbyName } = useParams();
   const [id, setId] = useState(`Guest_${String(Math.round(Math.random()*10000),)}`);
-  const socketUrl = `ws://localhost:8080/${lobbyName}/?token=${id}`;
+  const socketUrl = `ws://${process.env.NEXT_PUBLIC_HOST_URL}/${lobbyName}/?token=${id}`;
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
   const [selection, setSelection] = useState<number | null>(null);
@@ -60,6 +60,7 @@ export default function Page() {
       }
 
       if (parsedMessage.questionString !== undefined) {
+        setIntermission(false);
         setQuestion(parsedMessage.questionString);
       }
 
@@ -68,6 +69,7 @@ export default function Page() {
       }
 
       if (parsedMessage.answerOptions !== undefined) {
+        
         setOptions((prevOptions) => {
           if (
             JSON.stringify(prevOptions) !==
@@ -77,6 +79,7 @@ export default function Page() {
           }
           return prevOptions;
         });
+        setIntermission(false);
       }
 
       if (parsedMessage.playerList !== undefined) {
