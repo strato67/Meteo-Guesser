@@ -1,7 +1,6 @@
 "use client";
 
 import GameBoard from "./../../../components/game-board";
-import Image from "next/image";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import LoadingGame from "./../../../components/loading-game";
 import ConnectionFailed from "./../../../components/connection-failed";
@@ -11,10 +10,14 @@ import Scorecard from "./../../../components/scorecard";
 import GameCodeButton from "./../../../components/game-code-button";
 import SettingsDropdown from "./../../../components/settings-dropdown";
 import { convertTemp } from "./unitConvert";
+import Link from "next/link";
+import { Button } from "./../../../components/ui/button";
 
 export default function Page() {
   const { lobbyName } = useParams();
-  const [id, setId] = useState(`Guest_${String(Math.round(Math.random()*10000),)}`);
+  const [id, setId] = useState(
+    `Guest_${String(Math.round(Math.random() * 10000))}`
+  );
   const socketUrl = `ws://${process.env.NEXT_PUBLIC_HOST_URL}/${lobbyName}/?token=${id}`;
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
@@ -69,7 +72,6 @@ export default function Page() {
       }
 
       if (parsedMessage.answerOptions !== undefined) {
-        
         setOptions((prevOptions) => {
           if (
             JSON.stringify(prevOptions) !==
@@ -102,7 +104,6 @@ export default function Page() {
     const message = lastMessage?.data;
 
     if (message) {
-      console.log(message);
       parseMessage(message);
     }
   }, [lastMessage?.data, options]);
@@ -127,9 +128,8 @@ export default function Page() {
     <>
       <div className="relative w-full items-center h-screen ">
         <div
-          className={`w-full h-screen flex items-center justify-center opacity-100 z-20 ${
-            intermission ? "absolute" : "hidden"
-          }`}
+          className={`w-full h-screen flex items-center justify-center opacity-100 z-20 ${intermission ? "absolute" : "hidden"
+            }`}
         >
           <Scorecard
             serverResult={serverResult}
@@ -140,9 +140,8 @@ export default function Page() {
         </div>
 
         <div
-          className={`flex flex-col w-full items-center mt-16 gap-4 absolute inset-x-0 top-0 h-2/3 z-10 ${
-            intermission ? "blur-sm" : ""
-          }`}
+          className={`flex flex-col w-full items-center mt-16 gap-4 absolute inset-x-0 top-0 h-2/3 z-10 ${intermission ? "blur-sm" : ""
+            }`}
         >
           <div className="text-xl font-semibold">{round}/10</div>
           <h1 className="text-3xl text-center font-bold">
@@ -157,15 +156,13 @@ export default function Page() {
           </div>
 
           <div className="grid grid-cols-3 justify-items-center w-full place-items-center h-1/2">
+            <Button asChild variant="destructive" className="py-6 text-xl">
+              <Link href={"/"}>Leave Game</Link>
+            </Button>
             <div className="justify-self-center pt-8 bg-indigo-700 rounded-full h-24 text-center w-24 font-semibold text-2xl text-white select-none">
               {timer}
             </div>
-            <Image
-              src="https://ralfvanveen.com/wp-content/uploads/2021/06/Placeholder-_-Glossary.svg"
-              width={256}
-              height={256}
-              alt=""
-            />
+
             <GameCodeButton lobbyName={lobbyName} />
           </div>
         </div>

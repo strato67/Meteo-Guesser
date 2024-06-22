@@ -20,8 +20,10 @@ export default function GameCodeButton({
         <>
             <Button
                 onClick={() => {
-                    navigator.clipboard.writeText(lobbyName.toString());
-                    handleChange()
+                    navigator.clipboard.writeText(lobbyName.toString()).then(()=>
+                        handleChange()
+                    );
+
                 }}
                 className="py-6 text-xl"
             >
