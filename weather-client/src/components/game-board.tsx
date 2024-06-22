@@ -1,5 +1,5 @@
 import { Card, CardTitle } from "./ui/card";
-import { convertTemp } from "@/app/game/[lobbyName]/unitConvert";
+import { convertTemp } from "../app/game/[lobbyName]/unitConvert";
 
 export default function GameBoard({
     selection,

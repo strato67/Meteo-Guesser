@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "../components/ui/button";
 import { GearIcon } from "@radix-ui/react-icons";
 import {
   DropdownMenu,
@@ -7,8 +7,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Switch } from "@/components/ui/switch";
+} from "../components/ui/dropdown-menu";
+import { Switch } from "../components/ui/switch";
 
 export default function SettingsDropdown({
   fahrenheit,

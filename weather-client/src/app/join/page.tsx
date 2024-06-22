@@ -1,6 +1,6 @@
 "use client"
 
-import JoinGameCard from "@/components/join-game-card";
+import JoinGameCard from "../../components/join-game-card";
 
 export default function Page() {
     return (

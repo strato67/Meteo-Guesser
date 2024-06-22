@@ -1,15 +1,15 @@
 "use client";
 
-import GameBoard from "@/components/game-board";
+import GameBoard from "./../../../components/game-board";
 import Image from "next/image";
 import useWebSocket, { ReadyState } from "react-use-websocket";
-import LoadingGame from "@/components/loading-game";
-import ConnectionFailed from "@/components/connection-failed";
+import LoadingGame from "./../../../components/loading-game";
+import ConnectionFailed from "./../../../components/connection-failed";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import Scorecard from "@/components/scorecard";
-import GameCodeButton from "@/components/game-code-button";
-import SettingsDropdown from "@/components/settings-dropdown";
+import Scorecard from "./../../../components/scorecard";
+import GameCodeButton from "./../../../components/game-code-button";
+import SettingsDropdown from "./../../../components/settings-dropdown";
 import { convertTemp } from "./unitConvert";
 
 export default function Page() {

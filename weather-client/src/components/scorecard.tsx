@@ -5,7 +5,7 @@ import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import Link from "next/link";
 import { resetGlobalState } from "react-use-websocket";
-import { convertTemp } from "@/app/game/[lobbyName]/unitConvert";
+import { convertTemp } from "../app/game/[lobbyName]/unitConvert";
 
 type PlayerScore = { selection: string; score: number };
 
