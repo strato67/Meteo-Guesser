@@ -90,7 +90,7 @@ services:
       target: runner
     restart: always
     ports:
-      - 5173:5173
+      - 80:5173
     volumes:
       - ./weather-client:/app
     depends_on:
