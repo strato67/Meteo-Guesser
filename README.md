@@ -72,12 +72,11 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]]
+![Product Name Screen Shot][product-screenshot]
+
 Meteo Guesser is an weather guessing game inspired by Kahoot, designed for interactive play with others. Utilizing Websockets, players can create or join sessions hosted by fellow participants. The game challenges players to predict weather conditions, temperatures and locations based on clues provided. This project was developed with a microservices architecture in mind, and can be deployed on a cloud VM of your choice.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 ### Built With
 
@@ -91,8 +90,6 @@ Meteo Guesser is an weather guessing game inspired by Kahoot, designed for inter
 * [![Docker][Docker]][Docker-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- GETTING STARTED -->
 ## Getting Started
